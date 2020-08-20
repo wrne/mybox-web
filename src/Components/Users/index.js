@@ -1,7 +1,17 @@
 import React, { Component } from 'react'
-import usersStyles from "./users.module.css"
+// import usersStyles from "./users.module.css"
 import { FormValidateService } from "../../Service/FormValidateService"
 import { UserService } from '../../Service/UserService';
+import { TextField, Button, Grid, Box, Typography } from '@material-ui/core';
+
+const STATE_ERROR_INITIAL = {
+	id: '',
+	name: '',
+	email: '',
+	phone: '',
+	password: '',
+	confirmPassword: ''
+}
 
 export default class User extends Component {
 
@@ -27,15 +37,6 @@ export default class User extends Component {
 			},
 		}
 
-		const STATE_ERROR_INITIAL = {
-			id: '',
-			name: '',
-			email: '',
-			phone: '',
-			password: '',
-			confirmPassword: ''
-		}
-
 	}
 
 	fieldChange = (event) => {
@@ -50,14 +51,15 @@ export default class User extends Component {
 
 	fieldValidate = ({ target }) => {
 
+		console.log(`Passou pelo OnBlur`);
 		const { user } = this.state;
 		const { touched } = this.state;
 
-		const errors = {...this.STATE_ERROR_INITIAL};
+		const errors = { ...STATE_ERROR_INITIAL };
 
 		if (!this.state.user.name.includes(' ') && touched.name) {
 			errors['name'] = 'Informe o nome completo'
-		} 
+		}
 
 		// Validar o CPF
 		if (touched.id && UserService.existId) {
@@ -72,10 +74,13 @@ export default class User extends Component {
 		// Valida Phone
 
 		// Valida pswd
+		if (touched.password && !FormValidateService.PasswordValid(user.password)) {
+			errors['password'] = 'Senha inválida. Tente novamente'
+		}
 
 		// Valida confirm pwd
-		if (touched.password && touched.confirmPassword && user.password !== user.confirmPassword) {
-			errors['confirmPassword'] = 'As senhas devem ser id�nticas'
+		if (touched.password && touched.confirmPassword && !FormValidateService.PasswordMatch(user.password, user.confirmPassword)) {
+			errors['confirmPassword'] = 'As senhas devem ser idênticas'
 		}
 
 		this.setState({
@@ -91,82 +96,112 @@ export default class User extends Component {
 
 
 	render() {
-		const containerStyle = `${usersStyles.container} ${usersStyles.loginPage__inputWrap}`
+
 		return (
 
 			<>
-				<div className={containerStyle}>
+				<Box >
 					<form action="/" onSubmit={this.confirmForm}>
+						<Grid container direction="column" alignContent="center" alignItems="center" >
+							<Grid item>
+								<Typography variant="h5" >Informe seus dados:</Typography>
+							</Grid>
 
-						<InputFormField
-							id="name"
-							label='Nome'
-							value={this.state.user.name}
-							onChange={this.fieldChange}
-							onBlur={this.fieldValidate}
-							errors={this.state.errors}></InputFormField>
+							<FormFieldInput
+								id="name"
+								label="Nome:"
+								onChange={this.fieldChange}
+								onBlur={this.fieldValidate}
+								value={this.state.user.name}
+								error={!!this.state.errors.name}
+								helperText={this.state.errors.name}
+							></FormFieldInput>
 
-						<InputFormField
-							id="email"
-							label='E-mail'
-							value={this.state.user.email}
-							onChange={this.fieldChange}
-							onBlur={this.fieldValidate}
-							errors={this.state.errors}></InputFormField>
+							<FormFieldInput
+								id="email"
+								label="E-Mail:"
+								onChange={this.fieldChange}
+								onBlur={this.fieldValidate}
+								value={this.state.user.email}
+								error={!!this.state.errors.email}
+								helperText={this.state.errors.email}
+							></FormFieldInput>
 
-						<InputFormField
-							id="phone"
-							label='Telefone'
-							value={this.state.user.phone}
-							onChange={this.fieldChange}
-							onBlur={this.fieldValidate}
-							errors={this.state.errors}></InputFormField>
+							<FormFieldInput
+								id="phone"
+								label="Telefone:"
+								onChange={this.fieldChange}
+								onBlur={this.fieldValidate}
+								value={this.state.user.phone}
+								error={!!this.state.errors.phone}
+								helperText={this.state.errors.phone}
+							></FormFieldInput>
 
-						<InputFormField
-							id="id"
-							label='CPF'
-							value={this.state.user.id}
-							onChange={this.fieldChange}
-							onBlur={this.fieldValidate}
-							errors={this.state.errors}></InputFormField>
+							<FormFieldInput
+								id="id"
+								label="CPF:"
+								onChange={this.fieldChange}
+								onBlur={this.fieldValidate}
+								value={this.state.user.id}
+								error={!!this.state.errors.id}
+								helperText={this.state.errors.id}
+							></FormFieldInput>
 
-						<InputFormField
-							id="password"
-							label='Senha'
-							type="password"
-							value={this.state.user.password}
-							onChange={this.fieldChange}
-							onBlur={this.fieldValidate}
-							errors={this.state.errors}></InputFormField>
+							<FormFieldInput
+								id="password"
+								label="Senha:"
+								type="password"
+								onChange={this.fieldChange}
+								onBlur={this.fieldValidate}
+								value={this.state.user.password}
+								error={!!this.state.errors.password}
+								helperText={this.state.errors.password}
+							></FormFieldInput>
 
-						<InputFormField
-							id="confirmPassword"
-							label='Confirme a Senha'
-							type="password"
-							value={this.state.user.confirmPassword}
-							onChange={this.fieldChange}
-							onBlur={this.fieldValidate}
-							errors={this.state.errors}></InputFormField>
+							<FormFieldInput
+								id="confirmPassword"
+								label="Confirme a Senha:"
+								type="password"
+								onChange={this.fieldChange}
+								onBlur={this.fieldValidate}
+								value={this.state.user.confirmPassword}
+								error={!!this.state.errors.confirmPassword}
+								helperText={this.state.errors.confirmPassword}
+							></FormFieldInput>
 
-						<button className={usersStyles.UserPage__btnLogin} type="submit">Confirmar</button>
+							<Grid item>
+								<Button type="submit">Confirmar</Button>
+							</Grid>
+						</Grid>
 
 					</form>
-
-				</div>
+				</Box>
 			</>
-
 		)
 
 	}
 }
 
-const InputFormField = ({ id, label, type = 'text', value, onChange, onBlur, errors }) => {
-	console.log(label);
+const FormFieldInput = ({ id, label, onChange, value, type = "text", onBlur, error = false, helperText }) => {
+
 	return (
-		<div>
-			<p style={{ color: 'red' }}>{errors && errors[id]}</p>
-			<label className={usersStyles.loginPage__label} htmlFor={id}>{label}</label>
-			<input className={usersStyles.loginPage__input} id={id} type={type} onBlur={onBlur} value={value} onChange={onChange}></input>
-		</div>
+
+		<Grid item>
+
+			<TextField
+				id={id}
+				label={label}
+				onChange={onChange}
+				onBlur={onBlur}
+				value={value}
+				type={type}
+				variant="outlined"
+				fullwidth
+				margin="dense"
+				error={error}
+				helperText={helperText}
+			></TextField>
+
+		</Grid>
 	)
 }

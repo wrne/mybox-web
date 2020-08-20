@@ -1,14 +1,18 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import User from './Components/Users';
+
+import {BrowserRouter} from 'react-router-dom'
+import Roteamento from './routes.js'
 
 function App() {
-  return (
-	  <Fragment>
-	  	<User></User>
-	  </Fragment>
-  );
+	return (
+		<>
+			<BrowserRouter>
+				<Roteamento />
+			</BrowserRouter>
+		</>
+	);
 }
 
 export default App;
