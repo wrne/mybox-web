@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Paper, Box, Grid, Typography, TextField, Button } from '@material-ui/core'
+import { Paper, Box,Container, Grid, Typography, TextField, Button, Link } from '@material-ui/core'
 
 export default class LoginPage extends Component {
 
@@ -24,13 +24,23 @@ export default class LoginPage extends Component {
 
 	}
 
+	newUser = () => {
+		console.log("Novo usuário");
+		this.props.history.push('/newuser')
+	}
+
+	forgotPassword = () => {
+		console.log("Esqueci a senha");
+	}
+
 	render() {
 		return (
-			<>
-				<Grid container fixed justify="center" >
+			<div style={{width: '100vw', height: '100vh', backgroundColor:'lightgray'}}>
+			 {/* <Container> */}
+				<Grid container fixed   >
 					<Grid Item xs={4} />
 					<Grid Item xs={4}>
-						<Paper bgcolor="primary.main" >
+						<Paper style={{marginTop:'40%'}} >
 
 							<form action="/" onSubmit={this.confirmForm} bgcolor="secundary.main">
 								{/*  */}
@@ -46,8 +56,8 @@ export default class LoginPage extends Component {
 										onChange={this.fieldChange}
 										onBlur={this.fieldValidate}
 										value={this.state.values.user}
-										error={!!this.state.errors.user}
-										helperText={this.state.errors.user}
+									// error={!!this.state.errors.user}
+									// helperText={this.state.errors.user}
 									></FormFieldInput>
 
 									<FormFieldInput
@@ -56,12 +66,25 @@ export default class LoginPage extends Component {
 										onChange={this.fieldChange}
 										onBlur={this.fieldValidate}
 										value={this.state.values.password}
-										error={!!this.state.errors.password}
-										helperText={this.state.errors.password}
+									// error={!!this.state.errors.password}
+									// helperText={this.state.errors.password}
 									></FormFieldInput>
 
 									<Grid item>
 										<Button type="submit">Confirmar</Button>
+									</Grid>
+
+									<Grid container item justify="center" xs={12} spacing={4}>
+										<Grid item>
+											<Typography>
+												<Link href="#" onClick={this.newUser}>Cadastre-se</Link>
+											</Typography>
+										</Grid>
+										<Grid item>
+											<Typography>
+												<Link href="#" onClick={this.forgotPassword}>Esqueceu a senha?</Link>
+											</Typography>
+										</Grid>
 									</Grid>
 
 								</Grid>
@@ -72,7 +95,8 @@ export default class LoginPage extends Component {
 
 					<Grid Item xs={4} />
 				</Grid>
-			</>
+				{/* </Container> */}
+			</div>
 		)
 	}
 }

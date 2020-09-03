@@ -11,10 +11,14 @@ export const FormValidateService = {
 		// } else {
 		// 	return true
 		// }
-		var filter = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-		if (!filter.test(email)) {
-			return false
-		}
+
+
+
+		
+		// var filter = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+		// if (!filter.test(email)) {
+		// 	return false
+		// }
 
 		return true
 	},
