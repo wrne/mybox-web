@@ -12,12 +12,12 @@ export default function Roteamento(){
 
 	return (
 		<Switch>
-			{/* <PrivateRoute path="/" component={HomePage} exact /> */}
 			<Route path="/login" component={LoginPage} />
 			<Route path="/menu" component={Menu} />
 			<Route path="/newuser" component={NewUserPage} />
 			<Route path="/notelist" component={NotesList} />
-			<Route path="/" component={HomePage} exact />
+			{/* <Route path="/" component={HomePage} exact /> */}
+			<PrivateRoute path="/" component={HomePage} exact />
 			<Route component={NotFoundPage} />
 		</Switch>
 

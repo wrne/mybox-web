@@ -39,6 +39,20 @@ export const NotesThunkActions = {
 		}
 	},
 
+	saveEditNote: (note) => {
+		return dispatch => {
+
+			// Implementação da API para adicionar nova nota
+			dispatch({
+				type: Types.SAVE_EDIT_NOTE,
+				payload: {
+					editedNote: note
+				}
+			})
+
+		}
+	},
+
 	editNote: (note) => {
 		return dispatch => {
 
@@ -64,11 +78,9 @@ export const NotesThunkActions = {
 
 	cancelNewNote: () => {
 		return dispatch => {
-
 			dispatch({
 				type: Types.CANCEL_NEW_NOTE
 			})
-
 		}
 	}
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button,Container, Card, ListGroup } from 'react-bootstrap';
+import { Tooltip, OverlayTrigger, Row, Col, Button, Container, Card, ListGroup } from 'react-bootstrap';
 import { ReactReduxContext } from 'react-redux';
 import { NotesThunkActions } from '../store/ducks/notes';
 
@@ -19,7 +19,7 @@ export default class notesList extends Component {
 		const store = this.context.store;
 		// const noteList = NoteService.listAll();
 		store.subscribe(() => {
-			
+
 			this.setState({
 				noteList: store.getState().notes.data
 			})
@@ -33,9 +33,15 @@ export default class notesList extends Component {
 		this.context.store.dispatch(NotesThunkActions.editNote(noteDetail));
 
 	}
+	
+	renderTooltip = (props) => (
+		<Tooltip id="button-tooltip" {...props}>
+		  Detalhes
+		</Tooltip>
+	  );
 
 	renderList = () => {
-		
+
 		{
 			if (this.state.noteList.length) {
 				return (
@@ -46,7 +52,20 @@ export default class notesList extends Component {
 								// <ListGroup.Item>
 								<Card id={nota.id}>
 									<Card.Body>
-										<Card.Title>{nota.title}<Button onClick={()=>this.noteDetail(nota)}>Detalhes</Button></Card.Title>
+										<Row>
+											<Col lg="10"><Card.Title>{nota.title}</Card.Title></Col>
+											<Col lg="2">
+												<OverlayTrigger
+													placement="right"
+													delay={{ show: 500, hide: 400 }}
+													overlay={this.renderTooltip}
+												>
+											
+													<Button variant="outline-info" size="sm" onClick={() => this.noteDetail(nota)}>+</Button>
+												</OverlayTrigger>
+											</Col>
+
+										</Row>
 										<Card.Text>{nota.content.substring(0, 50)}</Card.Text>
 									</Card.Body>
 								</Card>
@@ -64,7 +83,7 @@ export default class notesList extends Component {
 	render() {
 
 		return (
-			<Container fluid>
+			<Container >
 				{this.renderList()}
 			</Container >
 		)

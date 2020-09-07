@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
-import NavBar from '../../Components/NavBar'
-import Menu from '../../Components/Menu'
+import MainBar from '../../Components/NavBar'
 import Note from '../../Components/Note'
 import NotesList from '../../Containers/notesList'
 import { Container, Row, Col } from 'react-bootstrap'
-import	{	ReactReduxContext	}	from	"react-redux";
-import {NotesThunkActions} from '../../store/ducks/notes'
-
+import { ReactReduxContext } from "react-redux";
+import { NotesThunkActions } from '../../store/ducks/notes'
+import {Types} from '../../store'
 
 export default class HomePage extends Component {
-	constructor(){
+	constructor() {
 		super();
 		this.state = {
 			newNote: false
@@ -17,8 +16,8 @@ export default class HomePage extends Component {
 	}
 	static contextType = ReactReduxContext;
 
-	componentDidMount(){
-		this.context.store.subscribe(()=>{
+	componentDidMount() {
+		this.context.store.subscribe(() => {
 			const newNote = this.context.store.getState().notes.newNote;
 			this.setState({
 				newNote: newNote
@@ -27,8 +26,13 @@ export default class HomePage extends Component {
 	}
 
 	newNote = () => {
-		
+
 		this.context.store.dispatch(NotesThunkActions.newNote())
+	}
+
+	myNotes = () => {
+
+		this.context.store.dispatch({type: Types.SHOW_MY_NOTES})
 	}
 
 	render() {
@@ -36,35 +40,36 @@ export default class HomePage extends Component {
 		return (
 			< >
 				{/* <div style={{display: 'flex'}}> */}
-				<Container>
+				<Container fluid>
 					<Row>
 
 						<header style={{ width: '100%' }} >
-							<NavBar></NavBar>
+							<nav>
+								<MainBar newNoteAction={this.newNote} myNotesAction={this.myNotes}></MainBar>
+							</nav>
 						</header>
-
 					</Row>
+					{/* <Container> */}
 					<Row>
-						<Col xl={2}>
+						{/* <Col lg={2}>
 							<Menu newNoteAction={this.newNote}></Menu>
-						</Col>
-						<Col xl={4}>
-								{/* <main  > */}
-									<NotesList></NotesList>
-								{/* </main> */}
+						</Col> */}
+						<Col lg={5}>
+							{/* <main  > */}
+							<NotesList></NotesList>
+							{/* </main> */}
 						</Col>
 						<Col>
-							<div style={{display:`${ newNoteDef}`}}>
+							<div style={{ display: `${newNoteDef}` }}>
 
-							<Note  actionConfirm={this.saveNote} actionCancel={this.cancelNote}></Note>
+								<Note actionConfirm={this.saveNote} actionCancel={this.cancelNote}></Note>
 							</div>
 						</Col>
 
 					</Row>
 
+					{/* </Container> */}
 				</Container>
-
-
 
 			</>
 		)

@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import { Paper, Box,Container, Grid, Typography, TextField, Button, Link } from '@material-ui/core'
+import {LoginContext} from '../../Context/loginContext'
 
 export default class LoginPage extends Component {
+
+	static contextType = LoginContext;
 
 	state = {
 		values: {
@@ -33,6 +36,14 @@ export default class LoginPage extends Component {
 		console.log("Esqueci a senha");
 	}
 
+	confirmForm = (e) =>{
+		e.preventDefault();
+		// Valida usuario e redireciona
+		this.context.setMsg('Login realizado com sucesso!')
+		localStorage.setItem("TOKEN_MY_BOX", 'token');
+		this.props.history.push('/')
+	}
+
 	render() {
 		return (
 			<div style={{width: '100vw', height: '100vh', backgroundColor:'lightgray'}}>
@@ -42,7 +53,7 @@ export default class LoginPage extends Component {
 					<Grid Item xs={4}>
 						<Paper style={{marginTop:'40%'}} >
 
-							<form action="/" onSubmit={this.confirmForm} bgcolor="secundary.main">
+							<form action="#" onSubmit={this.confirmForm} bgcolor="secundary.main">
 								{/*  */}
 								<Grid spacing={2} container direction="column" alignContent="center" alignItems="center" >
 
