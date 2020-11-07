@@ -1,0 +1,42 @@
+
+.container{
+	box-sizing: border-box;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	background-color:white ;
+}
+
+.header{
+	box-sizing: border-box;
+	width: 100%;
+	height: 6vh;
+} 
+.main{
+	box-sizing: border-box;
+	display: flex;
+	width: 100%;
+	max-width: 1220px;
+	height: 94vh;/*  calc(100% - 6vh);	 */
+}
+
+.noteList{
+	box-sizing: border-box;
+	width: 400px;
+	display: flex;
+	flex-direction: column;
+	border-right: gainsboro 1px solid;
+	margin-right: 7px;
+
+}
+
+.detailNote{
+	box-sizing: border-box;
+	width: calc(100% - 408px);
+	background-color: white;
+
+}
+

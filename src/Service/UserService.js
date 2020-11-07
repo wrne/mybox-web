@@ -14,7 +14,7 @@ export const UserService = {
 	createUser(user) {
 
 		console.log('CREATE-USER',user);
-		return apiService.request(`${API_URL}/user/create/`,'POST',
+		return apiService.request(`${API_URL}/users/`,'POST',
 		{
 			'Content-Type': 'application/json',
 		}

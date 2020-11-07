@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
+import { ReactReduxContext } from "react-redux";
 import NotFoundPage from './pages/NotFound'
 import LoginPage from './pages/Login'
 import HomePage from './pages/Home'
-import NewUserPage from './pages/NewUser'
+import NewUserPage from './pages/User'
 import NotesList from './Containers/notesList.js'
-// import NotesList from './Containers/_OLD_notesList_old'
+import { NotesThunkActions } from './store/ducks/notes/index.js'
 import Menu from './Components/Menu'
 
 export default function Roteamento(){
@@ -18,16 +19,27 @@ export default function Roteamento(){
 			<Route path="/notelist" component={NotesList} />
 			{/* <Route path="/" component={HomePage} exact /> */}
 			<PrivateRoute path="/" component={HomePage} exact />
-			<Route component={NotFoundPage} />
+			{/* <Route component={NotFoundPage} /> */}
 		</Switch>
 
 	)
 }
 
 class PrivateRoute extends Component{
+	
+	static contextType = ReactReduxContext;
+
 	isLoggedIn = ()=> {
-		//TODO: Validar se token está valido
-		if (localStorage.getItem('TOKEN_MY_BOX')){
+		console.log('IS_LOGGED',);
+		
+		const tokenLocalStorage = localStorage.getItem('TOKEN_MY_BOX');
+
+		// Tem token no LocalStorage, considera ele
+		if (tokenLocalStorage){
+			this.context.store.dispatch(NotesThunkActions.setNewToken(tokenLocalStorage))
+		}
+
+		if (this.context.store.getState().notes.token){
 			return true;
 		} else {
 			return false;

@@ -11,15 +11,24 @@ export const Types = {
 	CANCEL_NEW_NOTE: 'note/CANCEL_NEW',
 	EDIT_NOTE: 'note/EDIT',
 	SAVE_EDIT_NOTE: 'note/SAVE_EDIT',
-	SHOW_MY_NOTES: 'note/SHOW_ALL'
+	DELETE_NOTE: 'note/DELETE',
+	SHOW_MY_NOTES: 'note/SHOW_ALL',
+	SHOW_MY_SHARED_NOTES: 'note/SHOW_SHARED',
+	SHOW_SHARE_NOTES_AREA: 'note/SHOW_SHARE_AREA',
+	SET_TOKEN: 'note/SET_TOKEN',
+	DELETE_TOKEN: 'note/DELETE_TOKEN'
 }
 
 const INITIAL_STATE = {
 	data: [],
+	shared: [],
 	editNote: {},
+	showShared: false,
+	showShareNoteArea: false,
 	newNote: false,
 	loading: false,
 	error: false,
+	token: ''
 }
 
 function notesReducer(state = INITIAL_STATE, action) {
@@ -42,15 +51,52 @@ function notesReducer(state = INITIAL_STATE, action) {
 		});
 	}
 
-	if (action.type === Types.SHOW_MY_NOTES){
+	if (action.type === Types.SHOW_MY_NOTES) {
 
-		return({
+		return ({
 			...state,
+			showShared: false,
+			showShareNoteArea: false,
 			newNote: false,
 			editNotes: {}
+
 		});
 
 	}
+	
+	if (action.type === Types.SHOW_SHARE_NOTES_AREA) {
+
+		return ({
+			...state,
+			showShareNoteArea: true
+		});
+
+	}
+
+	if (action.type === Types.SHOW_MY_SHARED_NOTES) {
+
+		if (action.payload && action.payload.sharedNotes && action.payload.sharedNotes.length > 0) {
+
+			return ({
+				...state,
+				showShared: true,
+				newNote: false,
+				showShareNoteArea: false,
+				shared: action.payload.sharedNotes
+			});
+			
+		} else {
+			return ({
+				...state,
+				showShareNoteArea: false,
+				showShared: true,
+				newNote: false
+			});
+
+		}
+
+	}
+
 
 	if (action.type === Types.CANCEL_NEW_NOTE) {
 		return ({
@@ -99,9 +145,24 @@ function notesReducer(state = INITIAL_STATE, action) {
 		});
 	}
 
+	if (action.type === Types.SET_TOKEN) {
+		return ({
+			...state,
+			token: action.payload.newToken
+		});
+	}
+
+	
+	if (action.type === Types.DELETE_TOKEN) {
+		return ({
+			...state,
+			token: ''
+		});
+	}
+
 	if (action.type === Types.SAVE_EDIT_NOTE) {
-		const newNotes = state.data.map((note)=>{
-			if (note.id === action.payload.editedNote.id){
+		const newNotes = state.data.map((note) => {
+			if (note.id === action.payload.editedNote.id) {
 				return action.payload.editedNote;
 			} else {
 				return note;
@@ -116,7 +177,22 @@ function notesReducer(state = INITIAL_STATE, action) {
 			editNote: {}
 		});
 	}
-	
+
+	if (action.type == Types.DELETE_NOTE) {
+		const newNotes = state.data.filter(note => {
+
+			if (note.id !== action.payload.idDeleted) {
+				return note;
+			};
+		});
+
+		return ({
+			...state,
+			data: newNotes,
+			editNote: {}
+		})
+	}
+
 	return state
 }
 

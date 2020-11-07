@@ -1,17 +1,33 @@
-import React, { Component } from 'react'
-import { Paper, Box,Container, Grid, Typography, TextField, Button, Link } from '@material-ui/core'
-import {LoginContext} from '../../Context/loginContext'
+import React, { Component, Redirect } from 'react'
+import MainBar from '../../Components/NavBar'
+import { Paper, Box, Container, Grid, Typography, TextField, Link } from '@material-ui/core'
+import { Button } from 'react-bootstrap'
+import { LoginContext } from '../../Context/loginContext'
+import { LoginService } from '../../Service/LoginService';
+import style from './login.module.css'
+import { NotesThunkActions } from '../../store/ducks/notes/index.js'
+import { ReactReduxContext } from "react-redux";
+
+const ThemeContext = React.createContext('light');
+
 
 export default class LoginPage extends Component {
 
-	static contextType = LoginContext;
+	constructor() {
 
-	state = {
-		values: {
-			user: '',
-			password: ''
+		super();
+
+		this.state = {
+			values: {
+				user: '',
+				password: ''
+			},
+			redirectToHome: false
 		}
 	}
+
+	static contextType = ReactReduxContext;
+	
 
 	fieldChange = ({ target }) => {
 
@@ -36,78 +52,108 @@ export default class LoginPage extends Component {
 		console.log("Esqueci a senha");
 	}
 
-	confirmForm = (e) =>{
-		e.preventDefault();
-		// Valida usuario e redireciona
-		this.context.setMsg('Login realizado com sucesso!')
-		localStorage.setItem("TOKEN_MY_BOX", 'token');
+	redirectToHome = () => {
+
 		this.props.history.push('/')
+		// const redirectToHome = true;
+		// this.setState({ redirectToHome });
+
 	}
 
+	confirmForm = (event) => {
+		event.preventDefault();
+
+
+		// Valida usuario e redireciona
+		LoginService.login(
+			this.state.values.user,
+			this.state.values.password
+		)
+			.then(response => {
+				if (response.ok) {
+
+					// this.context.setMsg(response.message);
+					this.context.store.dispatch(NotesThunkActions.setNewToken(response.token))
+					this.redirectToHome();
+
+				} else {
+					// this.context.setMsg(response.message);
+					alert(response.message)
+				}
+			});
+
+	}
+
+
 	render() {
+		if (this.state.redirectToHome.redirect) {
+			console.log('REDIRECIONANDO...');
+			return (<Redirect to="/" />)
+		}
 		return (
-			<div style={{width: '100vw', height: '100vh', backgroundColor:'lightgray'}}>
-			 {/* <Container> */}
-				<Grid container fixed   >
-					<Grid Item xs={4} />
-					<Grid Item xs={4}>
-						<Paper style={{marginTop:'40%'}} >
+			<>
+				<MainBar newNoteAction={this.newNote} myNotesAction={this.myNotes}></MainBar>
+				<div className={style.main}>
+					{/* <Container> */}
+					<div className={style.container} >
 
-							<form action="#" onSubmit={this.confirmForm} bgcolor="secundary.main">
-								{/*  */}
-								<Grid spacing={2} container direction="column" alignContent="center" alignItems="center" >
 
-									<Grid item>
-										<Typography variant="h5" >Informe seus dados:</Typography>
-									</Grid>
+						<form action="/" onSubmit={this.confirmForm} >
+							{/*  */}
+							<div className={style.formFields} >
 
-									<FormFieldInput
-										id="user"
-										label="Usuário:"
-										onChange={this.fieldChange}
-										onBlur={this.fieldValidate}
-										value={this.state.values.user}
-									// error={!!this.state.errors.user}
-									// helperText={this.state.errors.user}
-									></FormFieldInput>
+								<div className={style.formTitle}>
+									<Typography variant="h4" >Sign In</Typography>
+								</div>
 
-									<FormFieldInput
-										id="password"
-										label="Senha:"
-										onChange={this.fieldChange}
-										onBlur={this.fieldValidate}
-										value={this.state.values.password}
-									// error={!!this.state.errors.password}
-									// helperText={this.state.errors.password}
-									></FormFieldInput>
 
-									<Grid item>
-										<Button type="submit">Confirmar</Button>
-									</Grid>
+								<FormFieldInput
+									id="user"
+									label="Email:"
+									onChange={this.fieldChange}
+									onBlur={this.fieldValidate}
+									value={this.state.values.user}
+									className={style.textField}
+								// error={!!this.state.errors.user}
+								// helperText={this.state.errors.user}
+								></FormFieldInput>
 
-									<Grid container item justify="center" xs={12} spacing={4}>
-										<Grid item>
-											<Typography>
-												<Link href="#" onClick={this.newUser}>Cadastre-se</Link>
-											</Typography>
-										</Grid>
-										<Grid item>
-											<Typography>
-												<Link href="#" onClick={this.forgotPassword}>Esqueceu a senha?</Link>
-											</Typography>
-										</Grid>
-									</Grid>
+								<FormFieldInput
+									id="password"
+									label="Senha:"
+									onChange={this.fieldChange}
+									onBlur={this.fieldValidate}
+									value={this.state.values.password}
+									type="password"
+								// error={!!this.state.errors.password}
+								// helperText={this.state.errors.password}
+								></FormFieldInput>
 
-								</Grid>
 
-							</form>
-						</Paper>
-					</Grid>
+								<Button variant="outline-primary" type="submit">Confirmar</Button>
 
-					<Grid Item xs={4} />
-				</Grid>
-				{/* </Container> */}
-			</div>
+
+							</div>
+
+						</form>
+
+						<div className={style.links}>
+							<div >
+								<small>
+									<Link href="#" onClick={this.newUser}>Cadastre-se</Link>
+								</small>
+							</div>
+							<div >
+								<small>
+									<Link href="#" onClick={this.forgotPassword}>Esqueceu a senha?</Link>
+								</small>
+							</div>
+						</div>
+
+					</div>
+					{/* </Container> */}
+				</div>
+			</>
 		)
 	}
 }
@@ -116,7 +162,7 @@ const FormFieldInput = ({ id, label, onChange, value, type = "text", onBlur, err
 
 	return (
 
-		<Grid item>
+		<div className={style.textField} >
 
 			<TextField
 				id={id}
@@ -132,6 +178,6 @@ const FormFieldInput = ({ id, label, onChange, value, type = "text", onBlur, err
 				helperText={helperText}
 			></TextField>
 
-		</Grid>
+		</div>
 	)
 }

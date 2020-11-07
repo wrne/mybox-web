@@ -1,0 +1,38 @@
+.main {
+	display: flex;
+	width: 100vw;
+	height: 94vh;
+	
+	justify-content: center;
+	align-items: center;
+	background-color:whitesmoke ;
+}
+
+.container {
+	min-width: 290px ;
+	width: 300px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	background-color: white;
+}
+
+.formTitle{
+	margin-bottom: 10px;
+}
+
+.formFields {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.formFields > Button {
+	margin-top: 20px;
+}
+
+.links {
+	display: flex;
+	justify-content: space-around;
+	margin-top: 20px;
+	margin-bottom: 5px;
+}

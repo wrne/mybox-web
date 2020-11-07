@@ -1,0 +1,11 @@
+.buttons{
+	display: flex;
+	justify-content: space-around;
+}
+
+.textArea{
+	height: 500px;
+	background-color: gray;
+	display: flex;
+	align-items: stretch;
+}

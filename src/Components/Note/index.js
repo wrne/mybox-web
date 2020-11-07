@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Row, Col, Card, Button, Form } from 'react-bootstrap'
 import { ReactReduxContext } from 'react-redux';
 import { NotesThunkActions } from '../../store/ducks/notes';
+import style from './note.module.css'
 
 export default class index extends Component {
 
@@ -12,6 +13,7 @@ export default class index extends Component {
 				id: '',
 				title: '',
 				content: ''
+				// creation: new Date()
 			},
 			editNote: false
 		}
@@ -35,6 +37,7 @@ export default class index extends Component {
 					id: '',
 					title: '',
 					content: ''
+					// creation: new Date()
 				}
 				this.setState({ newNote, editNote: false });
 
@@ -51,35 +54,20 @@ export default class index extends Component {
 
 	saveNote = () => {
 
+		const { store } = this.context;
 		if (this.state.editNote) {
 
-			this.context.store.dispatch(NotesThunkActions.saveEditNote(this.state.newNote));
+			this.context.store.dispatch(NotesThunkActions.saveEditNote(this.state.newNote, store.getState().notes.token));
 
 		} else {
 
-			this.context.store.dispatch(NotesThunkActions.addNote(this.state.newNote));
+			this.context.store.dispatch(NotesThunkActions.addNote(this.state.newNote, store.getState().notes.token));
 		}
-
-		// const newNote = {
-		// 	id: '',
-		// 	title: '',
-		// 	content: ''
-		// };
-		// this.setState({ newNote, editNote: false })
 
 	}
 
 	cancelNote = () => {
 		this.context.store.dispatch(NotesThunkActions.cancelNewNote());
-
-		// const newNote = {
-		// 	id: '',
-		// 	title: '',
-		// 	content: ''
-		// };
-
-		// this.setState({ newNote, editNote: false })
-
 	}
 
 	render() {
@@ -93,20 +81,18 @@ export default class index extends Component {
 
 					<Form.Group controlId="content">
 						<Form.Label>Conteúdo</Form.Label>
+						<div className={style.textArea}>
+
 						<Form.Control as="textarea" placeholder="Your note here.." value={this.state.newNote.content} onChange={this.changeForm}></Form.Control>
+						</div>
 					</Form.Group>
 
-					<Row>
+					<div className={style.buttons}>
 
-						<Col lg={{ span: 3, offset: 2 }} >
+						<Button  variant="secondary" onClick={this.saveNote}>{this.state.editNote ? 'Salvar' : 'Adicionar'}</Button>
+						<Button  variant="secondary" onClick={this.cancelNote}>Cancelar</Button>
 
-							<Button block variant="secondary" onClick={this.saveNote}>{this.state.editNote ? 'Salvar' : 'Adicionar'}</Button>
-						</Col>
-						<Col lg={{ span: 3, offset: 3 }} >
-
-							<Button block variant="secondary" onClick={this.cancelNote}>Cancelar</Button>
-						</Col>
-					</Row>
+					</div>
 
 				</Form>
 			</>

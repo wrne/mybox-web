@@ -3,61 +3,121 @@ import { NoteService } from '../../../Service/NoteService';
 
 export const NotesThunkActions = {
 
-	listAllNotes: () => {
+	listAllNotes: (token) => {
 		return dispatch => {
 			dispatch({ type: Types.INITIAL_CHARGE_NOTE });
-			console.log('DUCK_LIST_NOTES');
+			console.log('DUCK_LIST_NOTES', token);
+
+			// try {
+
+			NoteService.listAll(token)
+				.then(listNotes => {
+
+					dispatch({
+						type: Types.NOTES_CHARGED,
+						payload: {
+							notes: listNotes
+						}
+					})
+				})
+			// } catch {
+			// 	console.log('DUCK_LIST_NOTES_ERROR');
+			// 	dispatch({ type: Types.ERROR_INITIAL_CHARGE })
+			// }
+		}
+	},
+
+	listAllSharedNotes: (token) => {
+		return dispatch => {
 
 			try {
 
-				const listNotes = NoteService.listAll()
-				console.log('DUCK_LIST_NOTES_METH', listNotes);
-				dispatch({
-					type: Types.NOTES_CHARGED,
-					payload: {
-						notes: listNotes
-					}
-				})
-			} catch{
+				NoteService.listAll(token, { shared: true })
+					.then(listNotes => {
+
+						console.log('LIST_SHARED', listNotes);
+						dispatch({
+							type: Types.SHOW_MY_SHARED_NOTES,
+							payload: {
+								sharedNotes: listNotes
+							}
+						})
+					})
+			} catch {
 				dispatch({ type: Types.ERROR_INITIAL_CHARGE })
 			}
 		}
 	},
 
-	addNote: (note) => {
+	addNote: (note, token) => {
 		return dispatch => {
 
-			const newNote = note;
-			// Implementação da API para adicionar nova nota
-			dispatch({
-				type: Types.ADD_NOTE,
-				payload: {
-					newNote: newNote
-				}
-			})
+			NoteService.create(note, token)
+				.then(response => {
+
+					if (response.ok) {
+
+						const newNote = note;
+						dispatch({
+							type: Types.ADD_NOTE,
+							payload: {
+								newNote: newNote
+							}
+						})
+					} else {
+						alert('Erro ao incluir nota')
+						// throw new Error()
+					}
+
+				})
+
 
 		}
 	},
 
-	saveEditNote: (note) => {
+	saveEditNote: (note, token) => {
+
+		const editObj = {
+			id: note.id,
+			title: note.title,
+			content: note.content
+		}
 		return dispatch => {
 
-			// Implementação da API para adicionar nova nota
-			dispatch({
-				type: Types.SAVE_EDIT_NOTE,
-				payload: {
-					editedNote: note
-				}
-			})
+			NoteService.update(editObj, token)
+				.then(response => {
+
+					dispatch({
+						type: Types.SAVE_EDIT_NOTE,
+						payload: {
+							editedNote: response.note
+						}
+					})
+				})
 
 		}
+	},
+
+	deleteNote: (note, token) => {
+
+		return dispatch => {
+
+			NoteService.delete(note.id, token)
+				.then(response => {
+					dispatch({
+						type: Types.DELETE_NOTE,
+						payload: {
+							idDeleted: note.id
+						}
+					})
+				})
+		}
+
 	},
 
 	editNote: (note) => {
 		return dispatch => {
 
-			console.log('EDIT_NOTE_DUCK',note);
-			// Implementação da API para adicionar nova nota
 			dispatch({
 				type: Types.EDIT_NOTE,
 				payload: {
@@ -82,7 +142,46 @@ export const NotesThunkActions = {
 				type: Types.CANCEL_NEW_NOTE
 			})
 		}
-	}
+	},
 
+	shareNote: (note, shareDestination, token) => {
+
+		return dispatch => {
+			NoteService.share(note, shareDestination, token)
+				.then(responseApi => {
+					if (responseApi.ok) {
+
+						dispatch({
+							type: Types.SHOW_MY_NOTES
+						})
+					}
+				})
+
+		}
+	},
+
+	setNewToken: (newToken) => {
+		// Salva no Localstorage
+		localStorage.setItem('TOKEN_MY_BOX', newToken)
+
+		return dispatch =>
+			dispatch({
+				type: Types.SET_TOKEN,
+				payload: {
+					newToken: newToken
+				}
+			})
+	},
+	
+	deleteToken: () => {
+		// Remove token do Localstorage
+		console.log('Removendo token do localStorage');
+		localStorage.removeItem('TOKEN_MY_BOX')
+
+		return dispatch =>
+			dispatch({
+				type: Types.DELETE_TOKEN,
+			})
+	},
 
 }

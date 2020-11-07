@@ -1,0 +1,48 @@
+.item{
+	list-style: none;
+	padding-top: 7px;
+	padding-bottom: 7px;
+	border-bottom: 1px gray solid;
+}
+
+.item:hover {
+	background-color:whitesmoke ;
+}
+
+.titleItem {
+
+}
+
+.cabItem{
+	display: flex;
+	justify-content: space-between	;
+}
+
+/* .otherComponentsCabItem{
+	display: flex;
+	justify-content: space-between;
+} */
+.contentItem{
+	display: flex;
+	justify-content: space-between;
+}
+
+.contentItemText{
+	font-family:"Lucida Sans Unicode";
+	font-size: small;
+	color: darkslategray;
+}
+
+.buttons{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+/* .hoverbutton .hoverbuttonon,
+.hoverbutton:hover .hoverbuttonoff {
+  display: none;
+}
+
+.hoverbutton:hover .hoverbuttonon {
+  display: inline;
+} */
