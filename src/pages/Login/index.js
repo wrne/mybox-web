@@ -1,161 +1,140 @@
-import React, { Component, Redirect } from 'react'
+import React, { useState, useEffect, useContext, Redirect } from 'react'
 import MainBar from '../../Components/NavBar'
-import { Paper, Box, Container, Grid, Typography, TextField, Link } from '@material-ui/core'
+import { Typography, TextField, Link } from '@material-ui/core'
 import { Button } from 'react-bootstrap'
 import { LoginContext } from '../../Context/loginContext'
 import { LoginService } from '../../Service/LoginService';
 import style from './login.module.css'
-import { NotesThunkActions } from '../../store/ducks/notes/index.js'
-import { ReactReduxContext } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
-const ThemeContext = React.createContext('light');
+export default function LoginPage(props) {
 
+	// const [redirectToHome, setRedirectToHome] = useState(false);
+	const [inputValues, setInputValues] = useState({
+		user: '',
+		password: ''
+	});
 
-export default class LoginPage extends Component {
+	const msgContext = useContext(LoginContext);
+	const token = useSelector(state => state.notes.token);
+	const dispatch = useDispatch();
 
-	constructor() {
+	// useEffect(() => {
+	// 	if (token){
+	// 		setRedirectToHome(true);
+	// 	}
+	// })
 
-		super();
+	function fieldChange({ target }) {
 
-		this.state = {
-			values: {
-				user: '',
-				password: ''
-			},
-			redirectToHome: false
-		}
+		let values = inputValues
+
+		values = { ...values, [target.id]: target.value };
+
+		setInputValues(values)
 	}
 
-	static contextType = ReactReduxContext;
-	
-
-	fieldChange = ({ target }) => {
-
-		const values = { ...this.state.values, [target.id]: target.value }
-		this.setState({ values })
-
-	}
-
-	fieldValidate = () => {
+	function fieldValidate() {
 
 		// Valida se usuario existe
 		// Dispara Service de login
 
 	}
 
-	newUser = () => {
+	function newUser() {
 		console.log("Novo usuário");
-		this.props.history.push('/newuser')
+		props.history.push('/newuser')
 	}
 
-	forgotPassword = () => {
+	function forgotPassword() {
 		console.log("Esqueci a senha");
 	}
 
-	redirectToHome = () => {
-
-		this.props.history.push('/')
-		// const redirectToHome = true;
-		// this.setState({ redirectToHome });
-
-	}
-
-	confirmForm = (event) => {
+	function confirmForm(event) {
 		event.preventDefault();
 
-
+		console.log(`User: ${inputValues.user}| Password: ${inputValues.password}`);
+		
 		// Valida usuario e redireciona
 		LoginService.login(
-			this.state.values.user,
-			this.state.values.password
+			inputValues.user,
+			inputValues.password,
+			msgContext,
+			dispatch
 		)
-			.then(response => {
-				if (response.ok) {
-
-					// this.context.setMsg(response.message);
-					this.context.store.dispatch(NotesThunkActions.setNewToken(response.token))
-					this.redirectToHome();
-
-				} else {
-					// this.context.setMsg(response.message);
-					alert(response.message)
-				}
-			});
-
 	}
 
 
-	render() {
-		if (this.state.redirectToHome.redirect) {
-			console.log('REDIRECIONANDO...');
-			return (<Redirect to="/" />)
-		}
-		return (
-			<>
-				<MainBar newNoteAction={this.newNote} myNotesAction={this.myNotes}></MainBar>
-				<div className={style.main}>
-					{/* <Container> */}
-					<div className={style.container} >
+	if (token) {
+	// if (redirectToHome) {
+		console.log('REDIRECIONANDO...');
+		return (<Redirect to="/" />)
+	}
+	return (
+		<>
+			<MainBar></MainBar>
+			<div className={style.main}>
+				{/* <Container> */}
+				<div className={style.container} >
 
 
-						<form action="/" onSubmit={this.confirmForm} >
-							{/*  */}
-							<div className={style.formFields} >
+					<form action="/" onSubmit={confirmForm} >
+						{/*  */}
+						<div className={style.formFields} >
 
-								<div className={style.formTitle}>
-									<Typography variant="h4" >Sign In</Typography>
-								</div>
-
-
-								<FormFieldInput
-									id="user"
-									label="Email:"
-									onChange={this.fieldChange}
-									onBlur={this.fieldValidate}
-									value={this.state.values.user}
-									className={style.textField}
-								// error={!!this.state.errors.user}
-								// helperText={this.state.errors.user}
-								></FormFieldInput>
-
-								<FormFieldInput
-									id="password"
-									label="Senha:"
-									onChange={this.fieldChange}
-									onBlur={this.fieldValidate}
-									value={this.state.values.password}
-									type="password"
-								// error={!!this.state.errors.password}
-								// helperText={this.state.errors.password}
-								></FormFieldInput>
-
-
-								<Button variant="outline-primary" type="submit">Confirmar</Button>
-
-
+							<div className={style.formTitle}>
+								<Typography variant="h4" >Sign In</Typography>
 							</div>
 
-						</form>
 
-						<div className={style.links}>
-							<div >
-								<small>
-									<Link href="#" onClick={this.newUser}>Cadastre-se</Link>
-								</small>
-							</div>
-							<div >
-								<small>
-									<Link href="#" onClick={this.forgotPassword}>Esqueceu a senha?</Link>
-								</small>
-							</div>
+							<FormFieldInput
+								id="user"
+								label="Email:"
+								onChange={fieldChange}
+								onBlur={fieldValidate}
+								value={inputValues.user}
+								className={style.textField}
+							// error={!!this.state.errors.user}
+							// helperText={this.state.errors.user}
+							></FormFieldInput>
+
+							<FormFieldInput
+								id="password"
+								label="Senha:"
+								onChange={fieldChange}
+								onBlur={fieldValidate}
+								value={inputValues.password}
+								type="password"
+							// error={!!this.state.errors.password}
+							// helperText={this.state.errors.password}
+							></FormFieldInput>
+
+
+							<Button variant="outline-primary" type="submit">Confirmar</Button>
+
+
 						</div>
 
+					</form>
+
+					<div className={style.links}>
+						<div >
+							<small>
+								<Link href="#" onClick={newUser}>Cadastre-se</Link>
+							</small>
+						</div>
+						<div >
+							<small>
+								<Link href="#" onClick={forgotPassword}>Esqueceu a senha?</Link>
+							</small>
+						</div>
 					</div>
-					{/* </Container> */}
+
 				</div>
-			</>
-		)
-	}
+				{/* </Container> */}
+			</div>
+		</>
+	)
 }
 
 const FormFieldInput = ({ id, label, onChange, value, type = "text", onBlur, error = false, helperText }) => {
@@ -172,7 +151,6 @@ const FormFieldInput = ({ id, label, onChange, value, type = "text", onBlur, err
 				value={value}
 				type={type}
 				variant="outlined"
-				fullwidth
 				margin="dense"
 				error={error}
 				helperText={helperText}

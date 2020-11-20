@@ -10,7 +10,7 @@ import { LoginContextProvider } from './Context/loginContext';
 ReactDOM.render(
 	<Provider store={store}>
 		<LoginContextProvider>
-				<App />
+			<App />
 		</LoginContextProvider>
 	</Provider>,
 	document.getElementById('root')

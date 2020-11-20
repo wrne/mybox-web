@@ -1,41 +1,29 @@
-import React, { Component } from 'react'
-import { Navbar, Nav, Form, FormControl, Button } from 'react-bootstrap'
+import React from 'react'
 import style from './navBar.module.css'
-import { ReactReduxContext } from "react-redux";
-import { Types } from '../../store'
 
-// import MenuIcon from '@material-ui/icons/Menu';
+export default function MainBar(props) {
 
+	return (
 
-// export default class MainBar extends Component {
-export default function MainBar(props){
+		<div className={style.main}>
+			<div className={style.logo_nav}>
 
-	// static contextType = ReactReduxContext;
+				<div>
+					<h4 className={style.logo}>My Box</h4>
+				</div>
+				<nav className={style.menuContainer}>
 
-	// render() {
-
-		return (
-			
-			<div className={style.main}>
-				<div className={style.logo_nav}> 
-
-					<div>
-						<h4 className={style.logo}>My Box</h4>
+					<div className={style.menu}>
+						<li className={style.itemMenu}><a href="#" className={style.itemLink} onClick={props.newNoteAction}>Nova Nota |</a></li>
+						<li className={style.itemMenu}><a href="#" className={style.itemLink} onClick={props.myNotesAction}>Minhas Notas |</a></li>
+						<li className={style.itemMenu}><a href="#" className={style.itemLink} onClick={props.sharedWithMeAction} >Compartilhados comigo</a></li>
 					</div>
-					<nav className={style.menuContainer}>
-
-						<div className={style.menu}>
-							<li className={style.itemMenu}><a href="#" className={style.itemLink} onClick={props.newNoteAction}>Nova Nota |</a></li>
-							<li className={style.itemMenu}><a href="#" className={style.itemLink} onClick={props.myNotesAction}>Minhas Notas |</a></li>
-							<li className={style.itemMenu}><a href="#" className={style.itemLink} onClick={props.sharedWithMeAction} >Compartilhados comigo</a></li>
-						</div>
-					</nav>
-				</div>
-				<div className={style.logout}>
-					<li className={style.itemMenu}><a href="#" className={style.itemLink} onClick={props.logOutAction} >Log Out</a></li>
-				</div>
+				</nav>
 			</div>
+			<div className={style.logout}>
+				<li className={style.itemMenu}><a href="#" className={style.itemLink} onClick={props.logOutAction} >Log Out</a></li>
+			</div>
+		</div>
 
-		)
-	// }
+	)
 }

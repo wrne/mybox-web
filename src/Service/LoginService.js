@@ -1,38 +1,32 @@
 import { API_URL } from '../config.js'
 import { apiService } from './ApiService'
+import { NotesThunkActions } from '../store/ducks/notes/index.js'
 
+export const LoginService = {
 
-export const LoginService = {	
-
-	login(email, password) {
+	login(email, password, msgContext, dispatch) {
 		const login = {
 			email: email,
 			password: password
 		}
+
 		return apiService.request(`${API_URL}/sessions`, 'POST', { 'Content-Type': 'application/json', }, login)
-			.then(responseApi => {
-				
+			.then( responseApi => {
+
 				// Verificando erro
 				if (responseApi.error) {
-					return {
-						ok: false,
-						user: {},
-						message: 'Falha no login do usuário'
-					}
+
+					msgContext.setMsg('Falha no login do usuário');
+					return;
+
 				}
 
-				//SALVAR NO REDUX
-				// localStorage.setItem("TOKEN_MY_BOX", responseApi.token)
-				
-				return (
-					{
-						ok: true,
-						user: responseApi,
-						message: 'Usuário logado com sucesso!',
-						token: responseApi.token
-					}
-				)
-			})
+				msgContext.setMsg('Usuário logado com sucesso!');
+				console.log('LOGIN SuCCESS');
+				dispatch(NotesThunkActions.setNewToken(responseApi.token));
+				console.log('PASSOU PELO THUNK LOGIN');
+
+			});
 
 	}
 }

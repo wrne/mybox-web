@@ -162,15 +162,17 @@ export const NotesThunkActions = {
 
 	setNewToken: (newToken) => {
 		// Salva no Localstorage
-		localStorage.setItem('TOKEN_MY_BOX', newToken)
+		// console.log('SETNEWTOKEN_DUCK');
+		// localStorage.setItem('TOKEN_MY_BOX', newToken)
 
-		return dispatch =>
+		return dispatch => {
 			dispatch({
 				type: Types.SET_TOKEN,
 				payload: {
 					newToken: newToken
-				}
+				},
 			})
+		}
 	},
 	
 	deleteToken: () => {
