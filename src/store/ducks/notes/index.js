@@ -6,12 +6,13 @@ export const NotesThunkActions = {
 	listAllNotes: (token) => {
 		return dispatch => {
 			dispatch({ type: Types.INITIAL_CHARGE_NOTE });
-			console.log('DUCK_LIST_NOTES', token);
-
+			
 			// try {
-
-			NoteService.listAll(token)
+				
+				NoteService.listAll(token)
 				.then(listNotes => {
+					
+					console.log('DUCK_LIST_NOTES', listNotes);
 
 					dispatch({
 						type: Types.NOTES_CHARGED,
@@ -146,6 +147,7 @@ export const NotesThunkActions = {
 
 	shareNote: (note, shareDestination, token) => {
 
+		console.log('SHARE NOTE',note,shareDestination);
 		return dispatch => {
 			NoteService.share(note, shareDestination, token)
 				.then(responseApi => {
@@ -161,20 +163,21 @@ export const NotesThunkActions = {
 	},
 
 	setNewToken: (newToken) => {
-		// Salva no Localstorage
-		// console.log('SETNEWTOKEN_DUCK');
-		// localStorage.setItem('TOKEN_MY_BOX', newToken)
 
-		return dispatch => {
+		// Salva no Localstorage
+		console.log('SETNEWTOKEN_DUCK', newToken);
+		localStorage.setItem('TOKEN_MY_BOX', newToken)
+
+		return dispatch =>
 			dispatch({
 				type: Types.SET_TOKEN,
 				payload: {
 					newToken: newToken
-				},
+				}
 			})
-		}
+
 	},
-	
+
 	deleteToken: () => {
 		// Remove token do Localstorage
 		console.log('Removendo token do localStorage');

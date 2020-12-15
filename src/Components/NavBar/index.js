@@ -14,9 +14,9 @@ export default function MainBar(props) {
 				<nav className={style.menuContainer}>
 
 					<div className={style.menu}>
-						<li className={style.itemMenu}><a href="#" className={style.itemLink} onClick={props.newNoteAction}>Nova Nota |</a></li>
-						<li className={style.itemMenu}><a href="#" className={style.itemLink} onClick={props.myNotesAction}>Minhas Notas |</a></li>
-						<li className={style.itemMenu}><a href="#" className={style.itemLink} onClick={props.sharedWithMeAction} >Compartilhados comigo</a></li>
+						<li className={style.itemMenu}><a href="#" className={style.itemLink} onClick={props.viewNewNoteAction}>Nova Nota |</a></li>
+						<li className={style.itemMenu}><a href="#" className={style.itemLink} onClick={props.viewMyNotesAction}>Minhas Notas |</a></li>
+						<li className={style.itemMenu}><a href="#" className={style.itemLink} onClick={props.viewSharedWithMeAction} >Compartilhados comigo</a></li>
 					</div>
 				</nav>
 			</div>

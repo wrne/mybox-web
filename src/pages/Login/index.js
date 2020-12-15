@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext, Redirect } from 'react'
+import { useHistory } from "react-router-dom";
 import MainBar from '../../Components/NavBar'
 import { Typography, TextField, Link } from '@material-ui/core'
 import { Button } from 'react-bootstrap'
@@ -18,6 +19,7 @@ export default function LoginPage(props) {
 	const msgContext = useContext(LoginContext);
 	const token = useSelector(state => state.notes.token);
 	const dispatch = useDispatch();
+	// let history = useHistory();
 
 	// useEffect(() => {
 	// 	if (token){
@@ -53,8 +55,8 @@ export default function LoginPage(props) {
 	function confirmForm(event) {
 		event.preventDefault();
 
-		console.log(`User: ${inputValues.user}| Password: ${inputValues.password}`);
-		
+		console.log(`User: ${inputValues.user}| Password: ${inputValues.password} dispatch: ${dispatch}`);
+
 		// Valida usuario e redireciona
 		LoginService.login(
 			inputValues.user,
@@ -62,14 +64,20 @@ export default function LoginPage(props) {
 			msgContext,
 			dispatch
 		)
+		.then( result => {
+			if (result){
+				console.log('Login autorizado, redirecionando para a Home');
+				props.history.push('/')
+			}
+		})
 	}
 
 
-	if (token) {
-	// if (redirectToHome) {
-		console.log('REDIRECIONANDO...');
-		return (<Redirect to="/" />)
-	}
+	// if (token) {
+	// 	// if (redirectToHome) {
+	// 	console.log('REDIRECIONANDO...');
+	// 	return (<Redirect to="/" />)
+	// }
 	return (
 		<>
 			<MainBar></MainBar>

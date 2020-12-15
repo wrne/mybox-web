@@ -1,25 +1,8 @@
-
-.noteList{
-	box-sizing: border-box;
-	width: 400px;
-	display: flex;
-	flex-direction: column;
-	border-right: gainsboro 1px solid;
-	margin-right: 7px;
-}
-.detailNote{
-	box-sizing: border-box;
-	width: calc(100% - 408px);
-	background-color: white;
-}
-
 .item{
 	list-style: none;
 	padding-top: 7px;
 	padding-bottom: 7px;
 	border-bottom: 1px gray solid;
-	padding-left: 10px;
-	padding-right: 10px;
 }
 
 .item:hover {
@@ -33,7 +16,6 @@
 .cabItem{
 	display: flex;
 	justify-content: space-between	;
-	/* padding-right: 10px; */
 }
 
 /* .otherComponentsCabItem{
@@ -55,11 +37,7 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding-left: 10px;
-	/* padding-right: 10px; */
 }
-
-
 /* .hoverbutton .hoverbuttonon,
 .hoverbutton:hover .hoverbuttonoff {
   display: none;

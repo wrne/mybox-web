@@ -24,7 +24,6 @@ const INITIAL_STATE = {
 	shared: [],
 	editNote: {},
 	showShared: false,
-	showShareNoteArea: false,
 	newNote: false,
 	loading: false,
 	error: false,
@@ -64,14 +63,6 @@ function notesReducer(state = INITIAL_STATE, action) {
 
 	}
 	
-	if (action.type === Types.SHOW_SHARE_NOTES_AREA) {
-
-		return ({
-			...state,
-			showShareNoteArea: true
-		});
-
-	}
 
 	if (action.type === Types.SHOW_MY_SHARED_NOTES) {
 
@@ -154,10 +145,7 @@ function notesReducer(state = INITIAL_STATE, action) {
 
 	
 	if (action.type === Types.DELETE_TOKEN) {
-		return ({
-			...state,
-			token: ''
-		});
+		return (INITIAL_STATE); // Zera todas as variaveis do estado
 	}
 
 	if (action.type === Types.SAVE_EDIT_NOTE) {

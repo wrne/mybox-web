@@ -23,20 +23,5 @@
 	height: 94vh;/*  calc(100% - 6vh);	 */
 }
 
-.noteList{
-	box-sizing: border-box;
-	width: 400px;
-	display: flex;
-	flex-direction: column;
-	border-right: gainsboro 1px solid;
-	margin-right: 7px;
 
-}
-
-.detailNote{
-	box-sizing: border-box;
-	width: calc(100% - 408px);
-	background-color: white;
-
-}
 

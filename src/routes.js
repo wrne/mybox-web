@@ -5,16 +5,13 @@ import NotFoundPage from './pages/NotFound'
 import LoginPage from './pages/Login'
 import HomePage from './pages/Home'
 import NewUserPage from './pages/User'
-import NotesList from './Containers/notesList.js'
 import { NotesThunkActions } from './store/ducks/notes/index.js'
-import Menu from './Components/Menu'
 
 export default function Roteamento(){
 
 	return (
 		<Switch>
 			<Route path="/login" component={LoginPage} />
-			<Route path="/menu" component={Menu} />
 			<Route path="/newuser" component={NewUserPage} />
 			{/* <Route path="/" component={HomePage} exact /> */}
 			<PrivateRoute path="/" component={HomePage} exact />

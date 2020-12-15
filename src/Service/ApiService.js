@@ -7,20 +7,20 @@ export const apiService = {
 			return fetch(url, {
 				headers: headersRequest,
 			})
-			.then(async response => {
-				console.log('API_RESPONSE', response);
-				if (!response.ok) {
-					const responseErrorServer = await response.json();
-					const errorObj = Error(responseErrorServer.message);
-					throw errorObj;
-				}
+				.then(async response => {
+					console.log('API_RESPONSE', response);
+					if (!response.ok) {
+						const responseErrorServer = await response.json();
+						const errorObj = Error(responseErrorServer.message);
+						throw errorObj;
+					}
 
-				return await response.json();
-			})
-			.catch((err) => {
-				console.log('ERRO_NOTAS', err);
-				return ({ error: err })
-			})
+					return await response.json();
+				})
+				.catch((err) => {
+					console.log('ERRO_NOTAS', err);
+					return ({ error: err })
+				})
 		} else {
 
 			const bodyRequest = JSON.stringify(body)
@@ -29,7 +29,7 @@ export const apiService = {
 			return fetch(url, {
 				method: methodRequest,
 				headers: headersRequest,
-				body: JSON.stringify(body) //{bodyRequest}
+				body: JSON.stringify(body) 
 			})
 				.then(async response => {
 					console.log('API_RESPONSE', response);
